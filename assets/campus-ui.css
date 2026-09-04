@@ -1,0 +1,281 @@
+/*
+ * campus-ui — fundamentos visuais dos sistemas do IFCE Campus Tianguá.
+ *
+ * REGRA QUE SUSTENTA O RESTO: nada aqui toca seletor de elemento. Sem `body`,
+ * sem `button`, sem `input`, sem `*`. Os sistemas usam bases diferentes — um
+ * tem Bootstrap 4, outro tem Tailwind — e um seletor de elemento brigaria com
+ * elas em toda página. Variável de cor não colide com nada; classe prefixada
+ * também não. É o que permite adotar isto sem reescrever o que já existe.
+ *
+ * Adote em duas velocidades:
+ *   1. Só os tokens, usando `var(--campus-*)` no CSS que você já tem. Ganha
+ *      consistência de cor e de forma sem mudar uma linha de marcação.
+ *   2. Os padrões abaixo, quando a tela for nova. Eles são poucos de propósito:
+ *      saíram de telas que já rodam, não de suposição.
+ */
+
+:root {
+    /* Marca. O verde escuro é o do IFCE; o claro serve de superfície de apoio. */
+    --campus-verde: #006633;
+    --campus-verde-escuro: #004723;
+    --campus-verde-claro: #eaf6ef;
+
+    /* Texto. `--campus-tinta` para leitura, `--campus-suave` para rótulo e
+       apoio — nunca para texto que precisa ser lido com atenção. */
+    --campus-tinta: #17221d;
+    --campus-suave: #64736b;
+
+    /* Superfícies. `--campus-fundo` é o cinza-esverdeado que faz o branco do
+       cartão se destacar sem precisar de borda forte. */
+    --campus-fundo: #f2f7f4;
+    --campus-superficie: #ffffff;
+    --campus-campo: #f7faf8;
+    --campus-borda: #dce7e1;
+
+    /* Estados. */
+    --campus-erro: #c0392b;
+    --campus-erro-fundo: #fdecea;
+
+    /* Raios. Escala curta de propósito: três valores decidem tudo, e telas
+       ficam parecidas sem ninguém combinar nada. */
+    --campus-raio-p: 12px;
+    --campus-raio-m: 20px;
+    --campus-raio-g: 28px;
+
+    /* Sombras. Tingidas de verde em vez de cinza: sombra neutra sobre fundo
+       esverdeado suja a cor. */
+    --campus-sombra-baixa: 0 2px 8px rgba(0, 71, 35, .06);
+    --campus-sombra-media: 0 6px 16px rgba(0, 102, 51, .26);
+    --campus-sombra-alta: 0 18px 40px rgba(0, 71, 35, .14);
+
+    /* Tipografia do sistema operacional: carrega instantâneo e o aplicativo
+       parece nativo do aparelho, em vez de página com fonte baixada. */
+    --campus-fonte: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+    --campus-texto-p: 12px;
+    --campus-texto-m: 15px;
+    --campus-texto-g: 20px;
+
+    /* Espaçamento. */
+    --campus-esp-p: 8px;
+    --campus-esp-m: 16px;
+    --campus-esp-g: 24px;
+
+    /* Altura mínima de alvo de toque. Abaixo disso o dedo erra. */
+    --campus-toque: 44px;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   Padrão 1 — faixa de marca com cartão sobreposto
+
+   Duas caixas flutuando separadas leem como página web. A faixa encostando
+   nas bordas, com o conteúdo subindo por cima dela, lê como aplicativo: uma
+   superfície só. O `env(safe-area-inset-top)` evita que a marca fique atrás
+   do relógio e da câmera em celular com entalhe.
+   ───────────────────────────────────────────────────────────────────────── */
+.campus-faixa {
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    margin: 0 0 calc(var(--campus-esp-g) * -1 + 2px);
+    padding: calc(var(--campus-esp-g) + env(safe-area-inset-top)) var(--campus-esp-g) 44px;
+    text-align: center;
+    border-radius: 0 0 var(--campus-raio-g) var(--campus-raio-g);
+    background: linear-gradient(145deg, var(--campus-verde) 0%, var(--campus-verde-escuro) 100%);
+    color: #fff;
+}
+
+/* Círculo decorativo. Fica no canto e é cortado pelo overflow — dá
+   profundidade sem competir com o conteúdo. */
+.campus-faixa::after {
+    content: "";
+    position: absolute;
+    right: -36px;
+    bottom: -52px;
+    width: 132px;
+    height: 132px;
+    border: 24px solid rgba(255, 255, 255, .08);
+    border-radius: 50%;
+}
+
+.campus-faixa > * { position: relative; z-index: 1; }
+
+.campus-marca {
+    width: 58px;
+    height: 58px;
+    margin: 0 auto var(--campus-esp-m);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 17px;
+    background: var(--campus-superficie);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, .18);
+}
+
+.campus-marca img { width: 38px; height: 38px; object-fit: contain; }
+
+.campus-titulo { margin: 0; font-size: var(--campus-texto-g); font-weight: 800; letter-spacing: -.2px; }
+.campus-subtitulo { margin: 2px 0 0; font-size: 11px; font-weight: 500; color: rgba(255, 255, 255, .8); }
+
+/* Sobe por cima da faixa. O z-index é o que faz a emenda desaparecer. */
+.campus-cartao {
+    position: relative;
+    z-index: 2;
+    box-sizing: border-box;
+    max-width: 420px;
+    width: calc(100% - var(--campus-esp-g) * 2);
+    margin: 0 auto var(--campus-esp-p);
+    padding: var(--campus-esp-m) 18px;
+    border-radius: 22px;
+    background: var(--campus-superficie);
+    box-shadow: var(--campus-sombra-alta);
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   Padrão 2 — hierarquia de botão
+
+   Uma ação principal sólida, as demais com contorno. Dois botões sólidos
+   coloridos na mesma tela obrigam a pessoa a escolher sem pista de qual é o
+   caminho esperado.
+   ───────────────────────────────────────────────────────────────────────── */
+.campus-botao {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--campus-esp-p);
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 420px;
+    min-height: var(--campus-toque);
+    margin: 0 auto;
+    padding: 13px 18px;
+    border: none;
+    border-radius: var(--campus-raio-p);
+    font-family: var(--campus-fonte);
+    font-size: var(--campus-texto-m);
+    font-weight: 700;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.campus-botao--principal {
+    background: linear-gradient(135deg, var(--campus-verde), var(--campus-verde-escuro));
+    color: #fff;
+    box-shadow: var(--campus-sombra-media);
+}
+
+.campus-botao--secundario {
+    background: var(--campus-superficie);
+    color: #33413c;
+    border: 1px solid var(--campus-borda);
+    box-shadow: var(--campus-sombra-baixa);
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   Campos
+
+   `font-size: 16px` não é escolha estética: abaixo disso o iOS dá zoom
+   sozinho ao focar o campo, e a tela salta na cara de quem digita.
+   ───────────────────────────────────────────────────────────────────────── */
+.campus-campo {
+    box-sizing: border-box;
+    width: 100%;
+    min-height: var(--campus-toque);
+    padding: 12px 14px;
+    border: 1px solid var(--campus-borda);
+    border-radius: var(--campus-raio-p);
+    background: var(--campus-campo);
+    font-family: var(--campus-fonte);
+    font-size: 16px;
+    color: var(--campus-tinta);
+    transition: background .2s ease, border-color .2s ease, box-shadow .2s ease;
+}
+
+.campus-campo:focus {
+    outline: none;
+    background: var(--campus-superficie);
+    border-color: var(--campus-verde);
+    box-shadow: 0 4px 12px rgba(0, 102, 51, .12);
+}
+
+.campus-rotulo {
+    display: block;
+    margin-bottom: 5px;
+    font-size: var(--campus-texto-p);
+    font-weight: 700;
+    color: var(--campus-suave);
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   Padrão 3 — barra inferior
+
+   Fixa no rodapé, com o respiro do gesto de navegação do aparelho. Alcance
+   do polegar é o motivo: navegação no topo obriga a trocar a mão de posição.
+   ───────────────────────────────────────────────────────────────────────── */
+.campus-barra {
+    display: flex;
+    flex: 0 0 auto;
+    justify-content: space-around;
+    padding: var(--campus-esp-p) 0 calc(var(--campus-esp-p) + env(safe-area-inset-bottom));
+    background: var(--campus-superficie);
+    border-top: 1px solid var(--campus-borda);
+}
+
+.campus-barra-item {
+    display: flex;
+    flex: 1 1 0;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    min-height: var(--campus-toque);
+    padding: 4px 2px;
+    border: none;
+    background: none;
+    color: var(--campus-suave);
+    font-family: var(--campus-fonte);
+    font-size: 11px;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.campus-barra-item i { font-size: 18px; }
+.campus-barra-item[aria-current] { color: var(--campus-verde); }
+
+/* ─────────────────────────────────────────────────────────────────────────
+   Estrutura de tela
+
+   Faixa no topo, conteúdo rolando no meio, barra fixa embaixo — sem a página
+   inteira rolar, que é o que faz aplicativo parecer site.
+   ───────────────────────────────────────────────────────────────────────── */
+.campus-tela {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    min-height: 100dvh;
+    background: var(--campus-fundo);
+    font-family: var(--campus-fonte);
+    color: var(--campus-tinta);
+}
+
+.campus-tela-corpo {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    display: flex;
+    flex-direction: column;
+    padding-bottom: var(--campus-esp-p);
+}
+
+.campus-aviso {
+    box-sizing: border-box;
+    max-width: 420px;
+    width: calc(100% - var(--campus-esp-g) * 2);
+    margin: 0 auto var(--campus-esp-p);
+    padding: 10px 14px;
+    border-radius: var(--campus-raio-p);
+    background: var(--campus-erro-fundo);
+    color: var(--campus-erro);
+    font-size: 13px;
+    text-align: center;
+}

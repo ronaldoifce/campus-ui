@@ -1,0 +1,41 @@
+{
+    "name": "ronaldoifce/campus-ui",
+    "description": "Fundamentos visuais compartilhados: tokens de cor, forma e tipografia, mais os padrões de tela já provados em produção",
+    "type": "library",
+    "license": "PolyForm-Noncommercial-1.0.0",
+    "authors": [
+        {
+            "name": "Ronaldo Ribeiro",
+            "email": "ronaldo.ribeiro@ifce.edu.br",
+            "role": "Manutenção"
+        }
+    ],
+    "support": {
+        "email": "ronaldo.ribeiro@ifce.edu.br",
+        "issues": "https://github.com/ronaldoifce/campus-ui/issues"
+    },
+    "require": {
+        "php": ">=7.3"
+    },
+    "require-dev": {
+        "phpunit/phpunit": ">=8.0 <10.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "campusui\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "campusui\tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "test": "phpunit"
+    },
+    "config": {
+        "platform": {
+            "php": "7.4.0"
+        }
+    }
+}
