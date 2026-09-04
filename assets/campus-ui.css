@@ -64,218 +64,240 @@
     --campus-toque: 44px;
 }
 
-/* ─────────────────────────────────────────────────────────────────────────
-   Padrão 1 — faixa de marca com cartão sobreposto
+/* ═════════════════════════════════════════════════════════════════════════
+   PADRÕES — só abaixo de 768px
 
-   Duas caixas flutuando separadas leem como página web. A faixa encostando
-   nas bordas, com o conteúdo subindo por cima dela, lê como aplicativo: uma
-   superfície só. O `env(safe-area-inset-top)` evita que a marca fique atrás
-   do relógio e da câmera em celular com entalhe.
-   ───────────────────────────────────────────────────────────────────────── */
-.campus-faixa {
-    position: relative;
-    overflow: hidden;
-    width: 100%;
-    margin: 0 0 calc(var(--campus-esp-g) * -1 + 2px);
-    padding: calc(var(--campus-esp-g) + env(safe-area-inset-top)) var(--campus-esp-g) 44px;
-    text-align: center;
-    border-radius: 0 0 var(--campus-raio-g) var(--campus-raio-g);
-    background: linear-gradient(145deg, var(--campus-verde) 0%, var(--campus-verde-escuro) 100%);
-    color: #fff;
-}
+   Eles descrevem uma tela de aplicativo em celular: faixa encostando nas
+   bordas, cartão sobreposto, barra no alcance do polegar. Em tela larga essa
+   composição não faz sentido — lá sobra espaço para layouts que aproveitam a
+   largura, e forçar o padrão de celular desperdiçaria a tela.
 
-/* Círculo decorativo. Fica no canto e é cortado pelo overflow — dá
-   profundidade sem competir com o conteúdo. */
-.campus-faixa::after {
-    content: "";
-    position: absolute;
-    right: -36px;
-    bottom: -52px;
-    width: 132px;
-    height: 132px;
-    border: 24px solid rgba(255, 255, 255, .08);
-    border-radius: 50%;
-}
+   Estar dentro da media query é o que permite adotar isto num sistema que já
+   tem layout de desktop: basta usar as classes, sem escrever media query local
+   nem reimplementar o padrão. Foi a falta disso que obrigou o primeiro sistema
+   a recriar o cartão no tema dele.
 
-.campus-faixa > * { position: relative; z-index: 1; }
+   Os tokens acima continuam valendo em qualquer largura.
+   ═════════════════════════════════════════════════════════════════════════ */
+@media (max-width: 767.98px) {
+    /* ─────────────────────────────────────────────────────────────────────────
+       Padrão 1 — faixa de marca com cartão sobreposto
 
-.campus-marca {
-    width: 58px;
-    height: 58px;
-    margin: 0 auto var(--campus-esp-m);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 17px;
-    background: var(--campus-superficie);
-    box-shadow: 0 6px 16px rgba(0, 0, 0, .18);
-}
+       Duas caixas flutuando separadas leem como página web. A faixa encostando
+       nas bordas, com o conteúdo subindo por cima dela, lê como aplicativo: uma
+       superfície só. O `env(safe-area-inset-top)` evita que a marca fique atrás
+       do relógio e da câmera em celular com entalhe.
+       ───────────────────────────────────────────────────────────────────────── */
+    .campus-faixa {
+        position: relative;
+        overflow: hidden;
+        width: 100%;
+        margin: 0 0 calc(var(--campus-esp-g) * -1 + 2px);
+        padding: calc(var(--campus-esp-g) + env(safe-area-inset-top)) var(--campus-esp-g) 44px;
+        text-align: center;
+        border-radius: 0 0 var(--campus-raio-g) var(--campus-raio-g);
+        background: linear-gradient(145deg, var(--campus-verde) 0%, var(--campus-verde-escuro) 100%);
+        color: #fff;
+    }
 
-.campus-marca img { width: 38px; height: 38px; object-fit: contain; }
+    /* Círculo decorativo. Fica no canto e é cortado pelo overflow — dá
+       profundidade sem competir com o conteúdo. */
+    .campus-faixa::after {
+        content: "";
+        position: absolute;
+        right: -36px;
+        bottom: -52px;
+        width: 132px;
+        height: 132px;
+        border: 24px solid rgba(255, 255, 255, .08);
+        border-radius: 50%;
+    }
 
-.campus-titulo { margin: 0; font-size: var(--campus-texto-g); font-weight: 800; letter-spacing: -.2px; }
-.campus-subtitulo { margin: 2px 0 0; font-size: 11px; font-weight: 500; color: rgba(255, 255, 255, .8); }
+    .campus-faixa > * { position: relative; z-index: 1; }
 
-/* Sobe por cima da faixa. O z-index é o que faz a emenda desaparecer. */
-.campus-cartao {
-    position: relative;
-    z-index: 2;
-    box-sizing: border-box;
-    max-width: 420px;
-    width: calc(100% - var(--campus-esp-g) * 2);
-    margin: 0 auto var(--campus-esp-p);
-    padding: var(--campus-esp-m) 18px;
-    border-radius: 22px;
-    background: var(--campus-superficie);
-    box-shadow: var(--campus-sombra-alta);
-}
+    .campus-marca {
+        width: 58px;
+        height: 58px;
+        margin: 0 auto var(--campus-esp-m);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 17px;
+        background: var(--campus-superficie);
+        box-shadow: 0 6px 16px rgba(0, 0, 0, .18);
+    }
 
-/* ─────────────────────────────────────────────────────────────────────────
-   Padrão 2 — hierarquia de botão
+    .campus-marca img { width: 38px; height: 38px; object-fit: contain; }
 
-   Uma ação principal sólida, as demais com contorno. Dois botões sólidos
-   coloridos na mesma tela obrigam a pessoa a escolher sem pista de qual é o
-   caminho esperado.
-   ───────────────────────────────────────────────────────────────────────── */
-.campus-botao {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: var(--campus-esp-p);
-    box-sizing: border-box;
-    width: 100%;
-    max-width: 420px;
-    min-height: var(--campus-toque);
-    margin: 0 auto;
-    padding: 13px 18px;
-    border: none;
-    border-radius: var(--campus-raio-p);
-    font-family: var(--campus-fonte);
-    font-size: var(--campus-texto-m);
-    font-weight: 700;
-    text-decoration: none;
-    cursor: pointer;
-}
+    .campus-titulo { margin: 0; font-size: var(--campus-texto-g); font-weight: 800; letter-spacing: -.2px; }
+    .campus-subtitulo { margin: 2px 0 0; font-size: 11px; font-weight: 500; color: rgba(255, 255, 255, .8); }
 
-.campus-botao--principal {
-    background: linear-gradient(135deg, var(--campus-verde), var(--campus-verde-escuro));
-    color: #fff;
-    box-shadow: var(--campus-sombra-media);
-}
+    /* Sobe por cima da faixa. O z-index é o que faz a emenda desaparecer. */
+    .campus-cartao {
+        position: relative;
+        z-index: 2;
+        box-sizing: border-box;
+        max-width: 420px;
+        width: calc(100% - var(--campus-esp-g) * 2);
+        margin: 0 auto var(--campus-esp-p);
+        padding: var(--campus-esp-m) 18px;
+        border-radius: 22px;
+        background: var(--campus-superficie);
+        box-shadow: var(--campus-sombra-alta);
+    }
 
-.campus-botao--secundario {
-    background: var(--campus-superficie);
-    color: #33413c;
-    border: 1px solid var(--campus-borda);
-    box-shadow: var(--campus-sombra-baixa);
-}
+    /* Para quando o conteudo do cartao ja traz o proprio respiro — tela antiga
+       sendo adaptada, em que o formulario ou o cabecalho ja tem padding. Sem
+       isto, o respiro dobra e o cartao fica gordo. */
+    .campus-cartao--liso { padding: 0; }
 
-/* ─────────────────────────────────────────────────────────────────────────
-   Campos
+    /* ─────────────────────────────────────────────────────────────────────────
+       Padrão 2 — hierarquia de botão
 
-   `font-size: 16px` não é escolha estética: abaixo disso o iOS dá zoom
-   sozinho ao focar o campo, e a tela salta na cara de quem digita.
-   ───────────────────────────────────────────────────────────────────────── */
-.campus-campo {
-    box-sizing: border-box;
-    width: 100%;
-    min-height: var(--campus-toque);
-    padding: 12px 14px;
-    border: 1px solid var(--campus-borda);
-    border-radius: var(--campus-raio-p);
-    background: var(--campus-campo);
-    font-family: var(--campus-fonte);
-    font-size: 16px;
-    color: var(--campus-tinta);
-    transition: background .2s ease, border-color .2s ease, box-shadow .2s ease;
-}
+       Uma ação principal sólida, as demais com contorno. Dois botões sólidos
+       coloridos na mesma tela obrigam a pessoa a escolher sem pista de qual é o
+       caminho esperado.
+       ───────────────────────────────────────────────────────────────────────── */
+    .campus-botao {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: var(--campus-esp-p);
+        box-sizing: border-box;
+        width: 100%;
+        max-width: 420px;
+        min-height: var(--campus-toque);
+        margin: 0 auto;
+        padding: 13px 18px;
+        border: none;
+        border-radius: var(--campus-raio-p);
+        font-family: var(--campus-fonte);
+        font-size: var(--campus-texto-m);
+        font-weight: 700;
+        text-decoration: none;
+        cursor: pointer;
+    }
 
-.campus-campo:focus {
-    outline: none;
-    background: var(--campus-superficie);
-    border-color: var(--campus-verde);
-    box-shadow: 0 4px 12px rgba(0, 102, 51, .12);
-}
+    .campus-botao--principal {
+        background: linear-gradient(135deg, var(--campus-verde), var(--campus-verde-escuro));
+        color: #fff;
+        box-shadow: var(--campus-sombra-media);
+    }
 
-.campus-rotulo {
-    display: block;
-    margin-bottom: 5px;
-    font-size: var(--campus-texto-p);
-    font-weight: 700;
-    color: var(--campus-suave);
-}
+    .campus-botao--secundario {
+        background: var(--campus-superficie);
+        color: #33413c;
+        border: 1px solid var(--campus-borda);
+        box-shadow: var(--campus-sombra-baixa);
+    }
 
-/* ─────────────────────────────────────────────────────────────────────────
-   Padrão 3 — barra inferior
+    /* ─────────────────────────────────────────────────────────────────────────
+       Campos
 
-   Fixa no rodapé, com o respiro do gesto de navegação do aparelho. Alcance
-   do polegar é o motivo: navegação no topo obriga a trocar a mão de posição.
-   ───────────────────────────────────────────────────────────────────────── */
-.campus-barra {
-    display: flex;
-    flex: 0 0 auto;
-    justify-content: space-around;
-    padding: var(--campus-esp-p) 0 calc(var(--campus-esp-p) + env(safe-area-inset-bottom));
-    background: var(--campus-superficie);
-    border-top: 1px solid var(--campus-borda);
-}
+       `font-size: 16px` não é escolha estética: abaixo disso o iOS dá zoom
+       sozinho ao focar o campo, e a tela salta na cara de quem digita.
+       ───────────────────────────────────────────────────────────────────────── */
+    .campus-campo {
+        box-sizing: border-box;
+        width: 100%;
+        min-height: var(--campus-toque);
+        padding: 12px 14px;
+        border: 1px solid var(--campus-borda);
+        border-radius: var(--campus-raio-p);
+        background: var(--campus-campo);
+        font-family: var(--campus-fonte);
+        font-size: 16px;
+        color: var(--campus-tinta);
+        transition: background .2s ease, border-color .2s ease, box-shadow .2s ease;
+    }
 
-.campus-barra-item {
-    display: flex;
-    flex: 1 1 0;
-    flex-direction: column;
-    align-items: center;
-    gap: 3px;
-    min-height: var(--campus-toque);
-    padding: 4px 2px;
-    border: none;
-    background: none;
-    color: var(--campus-suave);
-    font-family: var(--campus-fonte);
-    font-size: 11px;
-    font-weight: 600;
-    text-decoration: none;
-    cursor: pointer;
-}
+    .campus-campo:focus {
+        outline: none;
+        background: var(--campus-superficie);
+        border-color: var(--campus-verde);
+        box-shadow: 0 4px 12px rgba(0, 102, 51, .12);
+    }
 
-.campus-barra-item i { font-size: 18px; }
-.campus-barra-item[aria-current] { color: var(--campus-verde); }
+    .campus-rotulo {
+        display: block;
+        margin-bottom: 5px;
+        font-size: var(--campus-texto-p);
+        font-weight: 700;
+        color: var(--campus-suave);
+    }
 
-/* ─────────────────────────────────────────────────────────────────────────
-   Estrutura de tela
+    /* ─────────────────────────────────────────────────────────────────────────
+       Padrão 3 — barra inferior
 
-   Faixa no topo, conteúdo rolando no meio, barra fixa embaixo — sem a página
-   inteira rolar, que é o que faz aplicativo parecer site.
-   ───────────────────────────────────────────────────────────────────────── */
-.campus-tela {
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-    min-height: 100dvh;
-    background: var(--campus-fundo);
-    font-family: var(--campus-fonte);
-    color: var(--campus-tinta);
-}
+       Fixa no rodapé, com o respiro do gesto de navegação do aparelho. Alcance
+       do polegar é o motivo: navegação no topo obriga a trocar a mão de posição.
+       ───────────────────────────────────────────────────────────────────────── */
+    .campus-barra {
+        display: flex;
+        flex: 0 0 auto;
+        justify-content: space-around;
+        padding: var(--campus-esp-p) 0 calc(var(--campus-esp-p) + env(safe-area-inset-bottom));
+        background: var(--campus-superficie);
+        border-top: 1px solid var(--campus-borda);
+    }
 
-.campus-tela-corpo {
-    flex: 1 1 auto;
-    min-height: 0;
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
-    display: flex;
-    flex-direction: column;
-    padding-bottom: var(--campus-esp-p);
-}
+    .campus-barra-item {
+        display: flex;
+        flex: 1 1 0;
+        flex-direction: column;
+        align-items: center;
+        gap: 3px;
+        min-height: var(--campus-toque);
+        padding: 4px 2px;
+        border: none;
+        background: none;
+        color: var(--campus-suave);
+        font-family: var(--campus-fonte);
+        font-size: 11px;
+        font-weight: 600;
+        text-decoration: none;
+        cursor: pointer;
+    }
 
-.campus-aviso {
-    box-sizing: border-box;
-    max-width: 420px;
-    width: calc(100% - var(--campus-esp-g) * 2);
-    margin: 0 auto var(--campus-esp-p);
-    padding: 10px 14px;
-    border-radius: var(--campus-raio-p);
-    background: var(--campus-erro-fundo);
-    color: var(--campus-erro);
-    font-size: 13px;
-    text-align: center;
+    .campus-barra-item i { font-size: 18px; }
+    .campus-barra-item[aria-current] { color: var(--campus-verde); }
+
+    /* ─────────────────────────────────────────────────────────────────────────
+       Estrutura de tela
+
+       Faixa no topo, conteúdo rolando no meio, barra fixa embaixo — sem a página
+       inteira rolar, que é o que faz aplicativo parecer site.
+       ───────────────────────────────────────────────────────────────────────── */
+    .campus-tela {
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+        min-height: 100dvh;
+        background: var(--campus-fundo);
+        font-family: var(--campus-fonte);
+        color: var(--campus-tinta);
+    }
+
+    .campus-tela-corpo {
+        flex: 1 1 auto;
+        min-height: 0;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+        display: flex;
+        flex-direction: column;
+        padding-bottom: var(--campus-esp-p);
+    }
+
+    .campus-aviso {
+        box-sizing: border-box;
+        max-width: 420px;
+        width: calc(100% - var(--campus-esp-g) * 2);
+        margin: 0 auto var(--campus-esp-p);
+        padding: 10px 14px;
+        border-radius: var(--campus-raio-p);
+        background: var(--campus-erro-fundo);
+        color: var(--campus-erro);
+        font-size: 13px;
+        text-align: center;
+    }
 }

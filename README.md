@@ -68,8 +68,14 @@ navegador serve o CSS antigo depois de uma atualização.
 consistência de cor e de forma sem mudar uma linha de marcação. É por aqui que
 sistemas existentes devem começar.
 
-**2. Os padrões.** Quando a tela for nova, use as classes. Elas assumem uma
-estrutura, e é isso que faz a tela sair pronta.
+**2. Os padrões.** Use as classes. **Elas só valem abaixo de 768px** — descrevem
+uma tela de aplicativo em celular, e em tela larga essa composição desperdiçaria
+o espaço. É esse escopo que permite adotá-las num sistema que já tem layout de
+desktop: basta usar a classe, sem escrever media query local nem reimplementar o
+padrão.
+
+Se o conteúdo do cartão já traz o próprio respiro — comum ao adaptar tela
+existente — use `campus-cartao campus-cartao--liso`, senão o respiro dobra.
 
 ## Tokens
 
